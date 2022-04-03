@@ -1,4 +1,4 @@
-import React, { ReactNode, useCallback, useRef, useEffect, useState } from 'react';
+import React, { useCallback, useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { TodoInfo } from '../../dto/todo';
 import { Point } from '../../types/common';

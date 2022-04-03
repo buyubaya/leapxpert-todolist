@@ -11,7 +11,6 @@ import { TodoAppContainerProps } from './types';
 import { withTodoListContainerWrapper } from './hoc/withTodoListContainerWrapper';
 import ThemeVars from '../ThemeVars/ThemeVars';
 import { useTodoAppContext } from './context/TodoAppConText';
-import ClickSpot from '@components/ClickSpot/ClickSpot';
 
 
 const StyledTodoAppContainer = styled.div`
