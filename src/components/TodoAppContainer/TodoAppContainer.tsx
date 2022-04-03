@@ -50,6 +50,7 @@ const StyledTodoControlsArea = styled(StyledTodoInputArea)`
 
 
 function TodoAppContainer({
+  isLoading,
   todoList,
   filterQuery,
   scrollValueRef,
@@ -185,6 +186,7 @@ function TodoAppContainer({
         </StyledTodoInputArea>
 
         <TodoList
+          isLoading={isLoading}
           list={todoList}
           scrollableSettings={TODO_SCROLLABLE_SETTINGS}
           initialScrollValue={initialScrollValue}

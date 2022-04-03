@@ -5,6 +5,7 @@ import { Point } from "../../types/common";
 
 
 export interface TodoAppContainerProps {
+  isLoading?: boolean;
   todoList: TodoInfo[];
   filterQuery: TodoFilterQuery;
   scrollValueRef: RefObject<Point>;

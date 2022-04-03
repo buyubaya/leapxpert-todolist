@@ -1,4 +1,4 @@
-import { TodoReducerState, UpdateTodoListActionPayload, AddTodoActionPayload, UpdateTodoActionPayload, DeleteTodoActionPayload, ToggleTodoActionPayload, FilterTodoStatusActionPayload } from "./types";
+import { TodoReducerState, UpdateTodoListActionPayload, AddTodoActionPayload, UpdateTodoActionPayload, DeleteTodoActionPayload, ToggleTodoActionPayload, FilterTodoStatusActionPayload, UpdateIsLoadingActionPayload } from "./types";
 import { TODO_REDUCER_ACTIONS } from "./constants";
 import { TODO_ITEM_STATUS } from "../../../dto/todo";
 
@@ -30,6 +30,7 @@ const FAKE_TODO_DATA = {
 
 export const initialTodoState: TodoReducerState = {
   isReady: false,
+  isLoading: false,
   todoData: {
     todoIDs: FAKE_TODO_DATA.todoIDs,
     todosMap: FAKE_TODO_DATA.todosMap,
@@ -74,6 +75,7 @@ export const todoReducer = <TodoReducerState, TodoActionPayload>(state, action) 
       return {
         ...state,
         isReady: typeof updatedData.isReady !== "undefined" ? updatedData.isReady : state.isReady,
+        isLoading: typeof updatedData.isLoading !== "undefined" ? updatedData.isLoading : state.isLoading,
         todoData: newTodoData,
       };
     }
@@ -199,6 +201,18 @@ export const todoReducer = <TodoReducerState, TodoActionPayload>(state, action) 
       return {
         ...state,
         filter: newFilter,
+      };
+    }
+
+    case TODO_REDUCER_ACTIONS.UPDATE_IS_LOADING: {
+      const payload = action.payload as UpdateIsLoadingActionPayload;
+      if (!payload) {
+        return state;
+      }
+      
+      return {
+        ...state,
+        isLoading: action.payload.isLoading,
       };
     }
 
