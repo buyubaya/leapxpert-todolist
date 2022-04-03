@@ -11,6 +11,7 @@ import { TodoAppContainerProps } from './types';
 import { withTodoListContainerWrapper } from './hoc/withTodoListContainerWrapper';
 import ThemeVars from '../ThemeVars/ThemeVars';
 import { useTodoAppContext } from './context/TodoAppConText';
+import { getVisibleIndexesFromScrollValue } from '../ScrollableView/helpers/getVisibleIndexesFromScrollValue';
 
 
 const StyledTodoAppContainer = styled.div`
@@ -109,10 +110,22 @@ function TodoAppContainer({
 
   const handleToggleAll = useCallback(
     () => {
+      const {
+        start: firstVisibleIndex,
+        end: lastVisibleIndex,
+      } = getVisibleIndexesFromScrollValue({
+        scrollValue: scrollValueRef.current,
+        rowHeight: TODO_SCROLLABLE_SETTINGS.rowHeight,
+        displayItem: TODO_SCROLLABLE_SETTINGS.displayItem,
+        toleranceItemNumber: TODO_SCROLLABLE_SETTINGS.toleranceItemNumber,
+      });
+      const partialList = (cacheRef.current.todoList || []).slice(firstVisibleIndex, lastVisibleIndex);
+
       const visibleTodoIDs = (
-        (cacheRef.current.todoList || [])
+        partialList
           .filter((_, index) => {
-            const itemY = index * TODO_SCROLLABLE_SETTINGS.rowHeight;
+            const actualIndex = firstVisibleIndex + index;
+            const itemY = actualIndex * TODO_SCROLLABLE_SETTINGS.rowHeight;
             const visibleYStart = scrollValueRef.current.y;
             const visibleYEnd = visibleYStart + TODO_SCROLLABLE_SETTINGS.rowHeight * TODO_SCROLLABLE_SETTINGS.displayItem;
             return itemY >= visibleYStart && itemY < visibleYEnd;

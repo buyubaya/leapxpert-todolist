@@ -60,7 +60,7 @@ function TodoControlsArea({
         </TodoButton>
 
         <TodoButton onClick={onTestMassiveItems} className="spacing">
-          Test with 10000 items
+          Test with 1.000.000 items
         </TodoButton>
       </StyledTodoControlsRowWrapper>
     </StyledTodoControlsAreaWrapper>

@@ -4,6 +4,7 @@ import { TodoInfo } from '../../dto/todo';
 import { Point } from '../../types/common';
 import { calculateVisibleRange } from './helpers/calculateVisibleRange';
 import { ScrollableViewProps } from './types';
+import { getVisibleIndexesFromScrollValue } from './helpers/getVisibleIndexesFromScrollValue';
 
 
 const StyledScrollableView = styled.div`
@@ -49,6 +50,16 @@ function ScrollableView({
     x: 0,
     y: 0,
   });
+  const {
+    start: firstVisibleIndex,
+    end: lastVisibleIndex,
+  } = getVisibleIndexesFromScrollValue({
+    scrollValue: scrollValue,
+    rowHeight: rowHeight,
+    displayItem: displayItem,
+    toleranceItemNumber: toleranceItemNumber,
+  });
+  const partialList = list.slice(firstVisibleIndex, lastVisibleIndex);
 
 
   // DIDMOUNT
@@ -78,7 +89,7 @@ function ScrollableView({
     [],
   );
 
-
+ 
   // RENDERs
   const renderItem = (todoItem: TodoInfo, index: number) => {
     const itemNode = itemRenderer(todoItem);
@@ -88,15 +99,16 @@ function ScrollableView({
       displayItem: displayItem,
       toleranceItemNumber: toleranceItemNumber
     });
-    const itemY = index * rowHeight;
+    const actualIndex = firstVisibleIndex + index;
+    const itemY = actualIndex * rowHeight;
 
     // Only display items in visible range
     if (itemY < start || itemY > end) {
-      return;
+      return null;
     }
 
     return (
-      <StyledPositionDiv key={todoItem.id} top={index * rowHeight}>
+      <StyledPositionDiv key={todoItem.id} top={actualIndex * rowHeight}>
         {itemNode}
       </StyledPositionDiv>
     );
@@ -109,7 +121,7 @@ function ScrollableView({
       onScroll={handleViewportScroll}
     >
       <StyledItemListContainer height={list.length * rowHeight}>
-        {list.map(renderItem)}
+        {partialList.map(renderItem)}
       </StyledItemListContainer>
     </StyledScrollableView>
   );

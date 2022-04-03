@@ -116,7 +116,7 @@ export function useTodoApp() {
 
   const testMassiveItems = useCallback(
     () => {
-      const TEST_TODO_LIST_IDS = (new Array(10000)).fill(null).map((_, index) => `${index}`);
+      const TEST_TODO_LIST_IDS = (new Array(1 * 1000 * 1000)).fill(null).map((_, index) => `${index}`);
       const TEST_TODOS_MAP = TEST_TODO_LIST_IDS.reduce((acc, cur) => {
         acc[cur] = {
           id: cur,
