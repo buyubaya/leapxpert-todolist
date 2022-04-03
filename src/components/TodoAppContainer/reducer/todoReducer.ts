@@ -3,29 +3,37 @@ import { TODO_REDUCER_ACTIONS } from "./constants";
 import { TODO_ITEM_STATUS } from "../../../dto/todo";
 
 
-const FAKE_TODO_LIST_IDS = (new Array(1000)).fill(null).map((_, index) => `${index}`);
-const FAKE_TODOS_MAP = FAKE_TODO_LIST_IDS.reduce((acc, cur) => {
-  acc[cur] = {
-    id: cur,
-    name: `TODO-ITEM-${cur}`,
-    createdAt: (new Date()).toISOString(),
-    status: Math.random() < 0.5 ? TODO_ITEM_STATUS.ACTIVE : TODO_ITEM_STATUS.DONE,
-  };
-  return acc;
-}, {});
-export const FAKE_TODO_DATA = {
-  todoIDs: FAKE_TODO_LIST_IDS,
-  todosMap: FAKE_TODOS_MAP,
+const FAKE_TODO_DATA = {
+  todoIDs: ["1", "2", "3"],
+  todosMap: {
+    1: {
+      id: "1",
+      name: "Implement features",
+      createdAt: (new Date()).toISOString(),
+      status: TODO_ITEM_STATUS.ACTIVE,
+    },
+    2: {
+      id: "2",
+      name: "Fix bugs",
+      createdAt: (new Date()).toISOString(),
+      status: TODO_ITEM_STATUS.ACTIVE,
+    },
+    3: {
+      id: "3",
+      name: "Run testcases",
+      createdAt: (new Date()).toISOString(),
+      status: TODO_ITEM_STATUS.ACTIVE,
+    },
+  },
 };
 
 
 export const initialTodoState: TodoReducerState = {
   isReady: false,
-  // todoData: {
-  //   todoIDs: [],
-  //   todosMap: {},
-  // },
-  todoData: FAKE_TODO_DATA,
+  todoData: {
+    todoIDs: FAKE_TODO_DATA.todoIDs,
+    todosMap: FAKE_TODO_DATA.todosMap,
+  },
   filter: {
     status: null,
   },
@@ -85,8 +93,9 @@ export const todoReducer = <TodoReducerState, TodoActionPayload>(state, action) 
         ...state.todoData,
       };
       
-      newTodoData.todoIDs.unshift(newItem.id);
+      newTodoData.todoIDs.push(newItem.id);
       newTodoData.todosMap[newItem.id] = newItem;
+      
       return {
         ...state,
         todoData: newTodoData,

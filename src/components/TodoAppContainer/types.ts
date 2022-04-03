@@ -14,5 +14,5 @@ export interface TodoAppContainerProps {
   toggleTodoItem: (todoIDs: string[]) => void;
   deleteTodoItem: (todoIDs: string[]) => void;
   filterTodoStatus: (status: TODO_ITEM_STATUS) => void;
-  test10000Items?: () => void;
+  testMassiveItems?: () => void;
 }

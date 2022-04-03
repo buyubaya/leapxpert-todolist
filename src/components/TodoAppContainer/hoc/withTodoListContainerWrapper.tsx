@@ -1,4 +1,4 @@
-import React, { ComponentType, useRef, useState, ReactElement, useMemo } from "react";
+import React, { ComponentType, useRef, useState, useMemo } from "react";
 import { TodoAppContainerProps } from "../types";
 import { useTodoApp } from "../hooks/useTodoApp";
 import { Point, TODO_THEME } from "../../../types/common";
@@ -15,7 +15,7 @@ export function withTodoListContainerWrapper(Comp: ComponentType<TodoAppContaine
       toggleTodoItem,
       deleteTodoItem,
       filterTodoStatus,
-      test10000Items,
+      testMassiveItems,
     } = useTodoApp();
   
     const scrollValueRef = useRef<Point>({
@@ -46,7 +46,7 @@ export function withTodoListContainerWrapper(Comp: ComponentType<TodoAppContaine
           toggleTodoItem={toggleTodoItem}
           deleteTodoItem={deleteTodoItem}
           filterTodoStatus={filterTodoStatus}
-          test10000Items={test10000Items}
+          testMassiveItems={testMassiveItems}
         />
       </TodoAppConText.Provider>
     );

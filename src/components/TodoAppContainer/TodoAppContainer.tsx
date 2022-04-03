@@ -11,6 +11,7 @@ import { TodoAppContainerProps } from './types';
 import { withTodoListContainerWrapper } from './hoc/withTodoListContainerWrapper';
 import ThemeVars from '../ThemeVars/ThemeVars';
 import { useTodoAppContext } from './context/TodoAppConText';
+import { getVisibleIndexesFromScrollValue } from '../ScrollableView/helpers/getVisibleIndexesFromScrollValue';
 
 
 const StyledTodoAppContainer = styled.div`
@@ -58,7 +59,7 @@ function TodoAppContainer({
   toggleTodoItem,
   deleteTodoItem,
   filterTodoStatus,
-  test10000Items,
+  testMassiveItems,
 }: TodoAppContainerProps) {
 
   // CONTEXT
@@ -84,9 +85,10 @@ function TodoAppContainer({
       }
 
       addNewTodoItem(value.trim());
+      // Scroll to new added item
       setInitialScrollValue({
         x: 0,
-        y: 0,
+        y: Number.MAX_SAFE_INTEGER,
       });
     },
     [],
@@ -108,10 +110,22 @@ function TodoAppContainer({
 
   const handleToggleAll = useCallback(
     () => {
+      const {
+        start: firstVisibleIndex,
+        end: lastVisibleIndex,
+      } = getVisibleIndexesFromScrollValue({
+        scrollValue: scrollValueRef.current,
+        rowHeight: TODO_SCROLLABLE_SETTINGS.rowHeight,
+        displayItem: TODO_SCROLLABLE_SETTINGS.displayItem,
+        toleranceItemNumber: TODO_SCROLLABLE_SETTINGS.toleranceItemNumber,
+      });
+      const partialList = (cacheRef.current.todoList || []).slice(firstVisibleIndex, lastVisibleIndex);
+
       const visibleTodoIDs = (
-        (cacheRef.current.todoList || [])
+        partialList
           .filter((_, index) => {
-            const itemY = index * TODO_SCROLLABLE_SETTINGS.rowHeight;
+            const actualIndex = firstVisibleIndex + index;
+            const itemY = actualIndex * TODO_SCROLLABLE_SETTINGS.rowHeight;
             const visibleYStart = scrollValueRef.current.y;
             const visibleYEnd = visibleYStart + TODO_SCROLLABLE_SETTINGS.rowHeight * TODO_SCROLLABLE_SETTINGS.displayItem;
             return itemY >= visibleYStart && itemY < visibleYEnd;
@@ -150,10 +164,10 @@ function TodoAppContainer({
     [],
   );
 
-  const handleTest10000 = useCallback(
+  const handleTestMassiveItems = useCallback(
     () => {
-      if (typeof test10000Items === "function") {
-        test10000Items();
+      if (typeof testMassiveItems === "function") {
+        testMassiveItems();
       }
     },
     [],
@@ -185,7 +199,7 @@ function TodoAppContainer({
             onToggleAll={handleToggleAll}
             onFilterStatus={handleFilterStatus}
             onToggleTheme={handleToggleTheme}
-            onTest10000={handleTest10000}
+            onTestMassiveItems={handleTestMassiveItems}
           />
         </StyledTodoControlsArea>
       </StyledTodoAppInner>
