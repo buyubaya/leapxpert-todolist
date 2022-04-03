@@ -6,4 +6,5 @@ export const TODO_REDUCER_ACTIONS = {
   DELETE_MANY_TODO: "delete-many-todo",
   TOGGLE_TODO_STATUS: "toggle-todo-status",
   FILTER_TODO_STATUS: "filter-todo-status",
+  UPDATE_IS_LOADING: "update-is-loading",
 };

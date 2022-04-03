@@ -5,6 +5,7 @@ import { TodoInfo } from '../../dto/todo';
 import styled from 'styled-components';
 import { Point, TodoScrollableSettings } from '../../types/common';
 import ClickSpot, { ClickSpotInstance } from '../ClickSpot/ClickSpot';
+import LoadingIcon from '../LoadingIcon/LoadingIcon';
 
 
 const StyledTodoListWrapper = styled.div`
@@ -13,8 +14,31 @@ const StyledTodoListWrapper = styled.div`
   background: var(--todo-list-bg);
 `;
 
+const StyledLoadingOverlay = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  &:before {
+    content: "";
+    display: block;position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--primary-bg);
+    opacity: 0.9;
+  }
+`;
+
 
 interface TodoListProps {
+  isLoading?: boolean;
   list: TodoInfo[];
   scrollableSettings: TodoScrollableSettings;
   initialScrollValue?: Point;
@@ -27,6 +51,7 @@ interface HandlersBag extends Partial<Pick<TodoListProps, "onToggleTodo" | "onDe
 
 
 function TodoList({
+  isLoading,
   list = [],
   scrollableSettings,
   initialScrollValue,
@@ -121,6 +146,14 @@ function TodoList({
       />
 
       {clickSpotComponent}
+
+      {
+        isLoading && (
+          <StyledLoadingOverlay>
+            <LoadingIcon />
+          </StyledLoadingOverlay>
+        )
+      }
     </StyledTodoListWrapper>
   );
 

@@ -2,6 +2,7 @@ import { TodoInfo, TODO_ITEM_STATUS } from '../../../dto/todo';
 
 export interface TodoReducerState {
   isReady: boolean;
+  isLoading: boolean;
   todoData: TodoData;
   filter: TodoFilterQuery;
 }
@@ -22,11 +23,13 @@ export type TodoActionPayload = (
   UpdateTodoActionPayload |
   DeleteTodoActionPayload |
   ToggleTodoActionPayload |
-  FilterTodoStatusActionPayload
+  FilterTodoStatusActionPayload |
+  UpdateIsLoadingActionPayload
 )
 
 export interface UpdateTodoListActionPayload {
   isReady: boolean;
+  isLoading?: boolean;
   todoIDs: string[];
   todosMap: { [todoID: string]: TodoInfo };
 }
@@ -49,4 +52,8 @@ export interface ToggleTodoActionPayload {
 
 export interface FilterTodoStatusActionPayload {
   status: TODO_ITEM_STATUS | null;
+}
+
+export interface UpdateIsLoadingActionPayload {
+  isLoading: boolean;
 }

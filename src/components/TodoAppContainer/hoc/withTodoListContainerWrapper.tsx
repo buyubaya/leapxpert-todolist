@@ -9,6 +9,7 @@ export function withTodoListContainerWrapper(Comp: ComponentType<TodoAppContaine
   function WrappedComponent() {
     
     const {
+      isLoading,
       todoList,
       filterQuery,
       addNewTodoItem,
@@ -17,7 +18,7 @@ export function withTodoListContainerWrapper(Comp: ComponentType<TodoAppContaine
       filterTodoStatus,
       testMassiveItems,
     } = useTodoApp();
-  
+    
     const scrollValueRef = useRef<Point>({
       x: 0,
       y: 0,
@@ -37,6 +38,7 @@ export function withTodoListContainerWrapper(Comp: ComponentType<TodoAppContaine
     return (
       <TodoAppConText.Provider value={contextValue}>
         <Comp
+          isLoading={isLoading}
           todoList={todoList}
           filterQuery={filterQuery}
           scrollValueRef={scrollValueRef}

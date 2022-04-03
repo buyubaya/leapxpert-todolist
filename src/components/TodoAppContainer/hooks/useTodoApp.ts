@@ -13,6 +13,7 @@ export function useTodoApp() {
   const [todoState, dispatch] = useReducer(todoReducer, initialTodoState);
   const {
     isReady,
+    isLoading,
     todoData,
     filter,
   } = todoState;
@@ -42,10 +43,12 @@ export function useTodoApp() {
       todoIDs,
       todosMap,
       isReady,
+      isLoading,
     }: {
       todoIDs: string[] | null,
       todosMap: Record<string, TodoInfo> | null,
       isReady?: boolean;
+      isLoading?: boolean;
     }) => {
       dispatch({
         type: TODO_REDUCER_ACTIONS.UPDATE_TODO_LIST,
@@ -53,6 +56,7 @@ export function useTodoApp() {
           todoIDs: todoIDs,
           todosMap: todosMap,
           isReady: isReady,
+          isLoading: isLoading,
         },
       });
     },
@@ -116,25 +120,33 @@ export function useTodoApp() {
 
   const testMassiveItems = useCallback(
     () => {
-      const TEST_TODO_LIST_IDS = (new Array(1 * 1000 * 1000)).fill(null).map((_, index) => `${index}`);
-      const TEST_TODOS_MAP = TEST_TODO_LIST_IDS.reduce((acc, cur) => {
-        acc[cur] = {
-          id: cur,
-          name: `TODO-ITEM-${cur}`,
-          createdAt: (new Date()).toISOString(),
-          status: Math.random() < 0.5 ? TODO_ITEM_STATUS.ACTIVE : TODO_ITEM_STATUS.DONE,
-        };
-        return acc;
-      }, {});
-
       dispatch({
-        type: TODO_REDUCER_ACTIONS.UPDATE_TODO_LIST,
+        type: TODO_REDUCER_ACTIONS.UPDATE_IS_LOADING,
         payload: {
+          isLoading: true,
+        },
+      });
+
+      // Use setTimeout to fake loading
+      setTimeout(() => {
+        const TEST_TODO_LIST_IDS = (new Array(1 * 1000 * 1000)).fill(null).map((_, index) => `${index}`);
+        const TEST_TODOS_MAP = TEST_TODO_LIST_IDS.reduce((acc, cur) => {
+          acc[cur] = {
+            id: cur,
+            name: `TODO-ITEM-${cur}`,
+            createdAt: (new Date()).toISOString(),
+            status: Math.random() < 0.5 ? TODO_ITEM_STATUS.ACTIVE : TODO_ITEM_STATUS.DONE,
+          };
+          return acc;
+        }, {});
+  
+        updateTodo({
           todoIDs: TEST_TODO_LIST_IDS,
           todosMap: TEST_TODOS_MAP,
           isReady: true,
-        },
-      });
+          isLoading: false,
+        });
+      }, 0);
     },
     [],
   )
@@ -178,6 +190,7 @@ export function useTodoApp() {
 
   return {
     isTodoReady: isReady,
+    isLoading: isLoading,
     todoList: todoList,
     filterQuery: filter,
     updateTodo: updateTodo,
