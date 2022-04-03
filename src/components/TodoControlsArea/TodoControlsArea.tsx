@@ -18,13 +18,13 @@ function TodoControlsArea({
   onToggleAll,
   onFilterStatus,
   onToggleTheme,
-  onTest10000,
+  onTestMassiveItems,
 }: {
   filterQuery: TodoFilterQuery;
   onToggleAll: () => void;
   onFilterStatus: (status: TODO_ITEM_STATUS | null) => void;
   onToggleTheme?: () => void;
-  onTest10000?: () => void;
+  onTestMassiveItems?: () => void;
 }) {
   
   const handleFilter = (status: TODO_ITEM_STATUS | null) => () => {
@@ -59,7 +59,7 @@ function TodoControlsArea({
           Toggle Theme
         </TodoButton>
 
-        <TodoButton onClick={onTest10000} className="spacing">
+        <TodoButton onClick={onTestMassiveItems} className="spacing">
           Test with 10000 items
         </TodoButton>
       </StyledTodoControlsRowWrapper>

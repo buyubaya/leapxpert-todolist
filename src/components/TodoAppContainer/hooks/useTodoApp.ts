@@ -1,11 +1,11 @@
 import { useEffect, useCallback, useReducer, useMemo } from "react";
-import { todoReducer, initialTodoState, FAKE_TODO_DATA } from "../reducer/todoReducer";
+import { todoReducer, initialTodoState } from "../reducer/todoReducer";
 import { TODO_REDUCER_ACTIONS } from "../reducer/constants";
 import { TodoInfo, TODO_ITEM_STATUS } from "../../../dto/todo";
 import { nanoid } from "nanoid";
 
 
-// const TODO_LOCAL_STORAGE_KEY = "todo-local-storage-key";
+const TODO_LOCAL_STORAGE_KEY = "todo-local-storage-key";
 
 
 export function useTodoApp() {
@@ -114,13 +114,24 @@ export function useTodoApp() {
     [],
   );
 
-  const test10000Items = useCallback(
+  const testMassiveItems = useCallback(
     () => {
+      const TEST_TODO_LIST_IDS = (new Array(10000)).fill(null).map((_, index) => `${index}`);
+      const TEST_TODOS_MAP = TEST_TODO_LIST_IDS.reduce((acc, cur) => {
+        acc[cur] = {
+          id: cur,
+          name: `TODO-ITEM-${cur}`,
+          createdAt: (new Date()).toISOString(),
+          status: Math.random() < 0.5 ? TODO_ITEM_STATUS.ACTIVE : TODO_ITEM_STATUS.DONE,
+        };
+        return acc;
+      }, {});
+
       dispatch({
         type: TODO_REDUCER_ACTIONS.UPDATE_TODO_LIST,
         payload: {
-          todoIDs: FAKE_TODO_DATA.todoIDs,
-          todosMap: FAKE_TODO_DATA.todosMap,
+          todoIDs: TEST_TODO_LIST_IDS,
+          todosMap: TEST_TODOS_MAP,
           isReady: true,
         },
       });
@@ -129,7 +140,7 @@ export function useTodoApp() {
   )
 
 
-  // ********** EFFECTs ********** //
+  // ********** SYNC LOCAL STORAGE ********** //
   // useEffect(() => {
   //   if (typeof window === "undefined") {
   //     return;
@@ -174,7 +185,7 @@ export function useTodoApp() {
     toggleTodoItem: toggleTodoItem,
     deleteTodoItem: deleteTodoItem,
     filterTodoStatus: filterTodoStatus,
-    test10000Items: test10000Items,
+    testMassiveItems: testMassiveItems,
   };
 
 }

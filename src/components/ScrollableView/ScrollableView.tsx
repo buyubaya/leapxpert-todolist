@@ -20,6 +20,11 @@ const StyledScrollableView = styled.div`
   max-height: ${({ height }) => `${height}px`};
 `;
 
+const StyledItemListContainer = styled.div`
+  width: 100%;
+  height: ${({ height }) => `${height}px`};
+`;
+
 const StyledPositionDiv = styled.div`
   position: absolute;
   width: 100%;
@@ -63,8 +68,8 @@ function ScrollableView({
       const newScrollValue = {
         x: event.target.scrollLeft,
         y: event.target.scrollTop,
-      }
-
+      };
+     
       setScrollValue(newScrollValue);
       if (typeof onScrollValueChange === "function") {
         onScrollValueChange(newScrollValue);
@@ -103,7 +108,9 @@ function ScrollableView({
       height={displayItem * rowHeight}
       onScroll={handleViewportScroll}
     >
-      {list.map(renderItem)}
+      <StyledItemListContainer height={list.length * rowHeight}>
+        {list.map(renderItem)}
+      </StyledItemListContainer>
     </StyledScrollableView>
   );
 }

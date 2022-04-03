@@ -58,7 +58,7 @@ function TodoAppContainer({
   toggleTodoItem,
   deleteTodoItem,
   filterTodoStatus,
-  test10000Items,
+  testMassiveItems,
 }: TodoAppContainerProps) {
 
   // CONTEXT
@@ -84,9 +84,10 @@ function TodoAppContainer({
       }
 
       addNewTodoItem(value.trim());
+      // Scroll to new added item
       setInitialScrollValue({
         x: 0,
-        y: 0,
+        y: Number.MAX_SAFE_INTEGER,
       });
     },
     [],
@@ -150,10 +151,10 @@ function TodoAppContainer({
     [],
   );
 
-  const handleTest10000 = useCallback(
+  const handleTestMassiveItems = useCallback(
     () => {
-      if (typeof test10000Items === "function") {
-        test10000Items();
+      if (typeof testMassiveItems === "function") {
+        testMassiveItems();
       }
     },
     [],
@@ -185,7 +186,7 @@ function TodoAppContainer({
             onToggleAll={handleToggleAll}
             onFilterStatus={handleFilterStatus}
             onToggleTheme={handleToggleTheme}
-            onTest10000={handleTest10000}
+            onTestMassiveItems={handleTestMassiveItems}
           />
         </StyledTodoControlsArea>
       </StyledTodoAppInner>
